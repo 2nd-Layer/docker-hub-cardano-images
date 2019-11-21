@@ -34,4 +34,17 @@ COPY --from=builder /usr/local/bin/jormungandr /usr/local/bin/
 COPY --from=builder /usr/local/bin/jcli /usr/local/bin/
 COPY usr/local/bin/docker-entrypoint.sh /usr/local/bin/
 
+RUN mkdir -p /srv/cardano/jormungandr/
+
+RUN useradd -b /srv/cardano/jormungandr/ \
+            -c "Jormungandr node user" \
+            -M \
+            -r \
+            -s /bin/nologin
+    
+USER jormungandr
+
+RUN mkdir /srv/cardano/jormungandr/{etc,log,storage}/
+RUN mkdir /srv/cardano/jormungandr/etc/secrets/
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
