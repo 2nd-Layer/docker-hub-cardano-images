@@ -40,7 +40,8 @@ RUN useradd -b /srv/cardano/jormungandr/ \
             -c "Jormungandr node user" \
             -M \
             -r \
-            -s /bin/nologin
+            -s /bin/nologin \
+            jormungandr
     
 USER jormungandr
 
