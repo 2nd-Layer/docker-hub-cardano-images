@@ -42,7 +42,8 @@ RUN useradd -b /srv/cardano/jormungandr/ \
             -r \
             -s /bin/nologin \
             jormungandr
-    
+
+RUN chown jormungandr.jormungandr /srv/cardano/jormungandr/
 USER jormungandr
 
 RUN mkdir /srv/cardano/jormungandr/{etc,log,storage}/
