@@ -13,6 +13,7 @@ RUN git clone --recurse-submodules https://github.com/input-output-hk/jormungand
 WORKDIR jormungandr
 RUN git fetch --tags
 RUN git checkout $JORMUNGANDR_VERSION
+RUN git submodule update --init --recursive
 RUN source $HOME/.cargo/env && cargo install --root /usr/local --path jormungandr
 RUN source $HOME/.cargo/env && cargo install --root /usr/local --path jcli
 
