@@ -46,6 +46,7 @@ RUN useradd -c "Jormungandr node user" \
 
 RUN chown jormungandr.jormungandr /srv/cardano/jormungandr/
 USER jormungandr
+COPY srv/cardano/jormungandr/.bashrc /srv/cardano/jormungandr/.bashrc
 
 RUN mkdir /srv/cardano/jormungandr/{etc,log,storage}/
 RUN mkdir /srv/cardano/jormungandr/etc/secrets/
