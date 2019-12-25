@@ -49,4 +49,6 @@ USER jormungandr
 RUN mkdir /srv/cardano/jormungandr/{etc,log,storage}/
 RUN mkdir /srv/cardano/jormungandr/etc/secrets/
 
+WORKDIR /srv/cardano/jormungandr/
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
