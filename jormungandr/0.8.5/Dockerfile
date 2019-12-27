@@ -49,8 +49,8 @@ USER jormungandr
 RUN mkdir /srv/cardano/jormungandr/{etc,log,storage}/
 RUN mkdir /srv/cardano/jormungandr/etc/secrets/
 
-RUN jcli auto-completion bash ~/etc/ && echo '. ~/etc/jcli.bash' >> .bash_profile
-
 WORKDIR /srv/cardano/jormungandr/
+
+RUN jcli auto-completion bash ~/etc/ && echo '. ~/etc/jcli.bash' >> .bash_profile
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

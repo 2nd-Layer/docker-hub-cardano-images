@@ -1,0 +1,3 @@
+#!/bin/bash
+
+jcli rest v0 node stats get -h http://127.0.0.1:3100/api
