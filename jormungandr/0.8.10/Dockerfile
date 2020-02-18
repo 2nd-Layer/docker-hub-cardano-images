@@ -53,4 +53,6 @@ WORKDIR /srv/cardano/jormungandr/
 
 RUN jcli auto-completion bash ~/etc/ && echo '. ~/etc/jcli.bash' >> .bash_profile
 
+HEALTHCHECK --interval=5s --timeout=1s CMD jcli-node-stats || exit 1
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

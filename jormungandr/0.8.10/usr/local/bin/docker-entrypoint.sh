@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
-JORMUNGAND_USER_HOME=$HOME
-GENESIS_HASH_FILE=${JORMUNGAND_USER_HOME}etc/genesis-hash.txt
-NODE_CONFIG_FILE=${JORMUNGAND_USER_HOME}etc/node_config.yaml
-NODE_SECRET_FILE=${JORMUNGAND_USER_HOME}etc/secrets/node_secret.yaml
+JORM_USER_HOME=$HOME
+GENESIS_HASH_FILE=${JORM_USER_HOME}etc/genesis-hash.txt
+NODE_CONFIG_FILE=${JORM_USER_HOME}etc/node_config.json
+NODE_SECRET_FILE=${JORM_USER_HOME}etc/secrets/node_secret.yaml
 
 function preExitHook () {
   exec "$@"

@@ -1,3 +1,15 @@
 #!/bin/bash
 
-jcli rest v0 node stats get -h http://127.0.0.1:3100/api
+source /usr/local/lib/jcli-set-env-variables.sh
+
+case "$1" in
+  pooltool-tip)
+    jcli rest v0 node stats get -h ${JORM_REST_API_URI} | grep "addr" | wc -l
+  ;;
+  count-public)
+    jcli rest v0 network stats get -h ${JORM_REST_API_URI} | grep "addr" | grep -v '~' | wc -l
+  ;;
+   *)
+    jcli rest v0 node stats get -h ${JORM_REST_API_URI}
+  ;;
+esac
