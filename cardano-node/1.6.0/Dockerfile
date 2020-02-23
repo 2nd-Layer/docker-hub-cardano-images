@@ -14,7 +14,7 @@ RUN git submodule update --init --recursive
 
 # Ugly workaround for vty-5.25.1
 RUN ln -s /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so
-RUN stack install
+RUN stack install --local-bin-path=/usr/local/bin
 
 FROM perlur/centos-base
 
@@ -30,10 +30,10 @@ RUN yum update -y && \
 
 EXPOSE 3000
 
-COPY --from=builder /root/.local/bin/cardano-node /usr/local/bin/
-COPY --from=builder /root/.local/bin/cardano-cli /usr/local/bin/
-COPY --from=builder /root/.local/bin/chairman /usr/local/bin/
-COPY --from=builder /root/.local/bin/wallet-client /usr/local/bin/
+COPY --from=builder /usr/local/bin/cardano-node /usr/local/bin/
+COPY --from=builder /usr/local/bin/cardano-cli /usr/local/bin/
+COPY --from=builder /usr/local/bin/chairman /usr/local/bin/
+COPY --from=builder /usr/local/bin/wallet-client /usr/local/bin/
 COPY usr/local/lib/* /usr/local/lib/
 COPY usr/local/bin/* /usr/local/bin/
 
