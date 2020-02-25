@@ -9,16 +9,10 @@ RUN git clone --recurse-submodules https://github.com/input-output-hk/cardano-no
 WORKDIR cardano-node
 RUN git fetch --tags
 RUN git checkout ${CARDANO_NODE_VERSION}
-RUN git remote add 2ndlayer https://github.com/2nd-Layer/cardano-node
-RUN git fetch 2ndlayer
-RUN git cherry-pick -n eab1f0dbeb818b9c59aafed3acb0085a67ab8ced
 
 # Ugly workaround for vty-5.25.1
 RUN ln -s /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so
-RUN stack install \
-      --flag cardano-node:-with_wallet-client \
-      --flag cardano-node:-with_chairman \
-      --local-bin-path=/usr/local/bin
+RUN stack install --local-bin-path=/usr/local/bin
 
 FROM perlur/centos-base
 
@@ -36,6 +30,8 @@ EXPOSE 3000
 
 COPY --from=builder /usr/local/bin/cardano-node /usr/local/bin/
 COPY --from=builder /usr/local/bin/cardano-cli /usr/local/bin/
+COPY --from=builder /usr/local/bin/chairman /usr/local/bin/
+COPY --from=builder /usr/local/bin/wallet-client /usr/local/bin/
 COPY usr/local/lib/* /usr/local/lib/
 COPY usr/local/bin/* /usr/local/bin/
 
