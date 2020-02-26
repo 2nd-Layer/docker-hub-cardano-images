@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo ${1}
+
 repositoryName="2ndlayer"
 
 for Dockerfile in $(find -name Dockerfile); do

@@ -1,13 +1,16 @@
 on: push
-name: Test Docker Build for images
+
+
+name: Test Docker Build
 
 jobs:
   docker-build:
-    name: Build Docker images
+    name: Build Docker image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Build Docker images
-        run: .github/tests/00_docker-build.sh
+      - name: Build Docker image
+        run: .github/tests/00_docker-build.sh ${GITHUB_REF##*/}
+      - name: Test 
       
