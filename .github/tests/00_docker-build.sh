@@ -3,7 +3,7 @@ set -e
 
 echo "Running on branch: ${1}"
 
-if [ -z ${1+x} ];
+if [ -z ${1+x} ]; then
   echo "No argument provided!"
   exit 1
 elif [ ${1} == 'master' ]; then
@@ -21,6 +21,9 @@ elif [[ ${1} =~ ^(add|update)-(jormungandr|cardano-node)-[0-9]+.*$ ]]; then
   imageTag=${repositoryName}/${imageName}:${imageVersion}
   dockerfileDir=${imageName}/${imageVersion}
   fnBuildDockerImage
+else
+  echo "Can't recognize argument!"
+  exit 1
 fi
 
 function fnBuildDockerImage {
