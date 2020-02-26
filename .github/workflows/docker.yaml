@@ -8,4 +8,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Build Docker images
+        runs: .github/tests/00_docker-build.sh
       
