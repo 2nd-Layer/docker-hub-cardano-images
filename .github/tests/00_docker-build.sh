@@ -3,6 +3,15 @@ set -e
 
 echo "Running on branch: ${1}"
 
+function fnBuildDockerImage {
+  imageTag=${repositoryName}/${imageName}:${imageVersion}
+  dockerfileDir=${imageName}/${imageVersion}
+  echo "Building Dockerfile for ${imageTag}"
+  pushd ${dockerfileDir}
+    docker build -t ${imageTag} ./
+  popd
+}
+
 if [ -z ${1+x} ]; then
   echo "No argument provided!"
   exit 1
@@ -25,12 +34,3 @@ else
   echo "Can't recognize argument!"
   exit 1
 fi
-
-function fnBuildDockerImage {
-  imageTag=${repositoryName}/${imageName}:${imageVersion}
-  dockerfileDir=${imageName}/${imageVersion}
-  echo "Building Dockerfile for ${imageTag}"
-  pushd ${dockerfileDir}
-    docker build -t ${imageTag} ./
-  popd
-}
