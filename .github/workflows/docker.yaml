@@ -1,8 +1,11 @@
 on: push
 name: Test Docker Build for images
+
 jobs:
-  build:
+  docker-build:
+    name: Build Docker images
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Checkout repository
+        uses: actions/checkout@v2
+      
