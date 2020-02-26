@@ -1,6 +1,6 @@
 on: push
   branches:
-    - 'master'
+    - master
     - 'add-jormungandr-[0-9]+.*'
     - 'update-jormungandr-[0-9]+.*'
     - 'add-cardano-node-[0-9]+.*'
