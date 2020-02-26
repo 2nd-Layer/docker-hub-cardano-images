@@ -3,7 +3,11 @@ set -e
 
 echo "Running on branch: ${1}"
 
-if [ -z ${1+x} ] || [ ${1} == 'master' ]; then
+if [ -z ${1+x} ];
+  echo "No argument provided!"
+  exit 1
+elif [ ${1} == 'master' ]; then
+  echo "Running on branch: ${1}; building all images."
   for Dockerfile in $(find -name Dockerfile); do
     imageName=$(echo ${Dockerfile} | awk -F '/' '{ print $2 }')
     imageVersion=$(echo ${Dockerfile} | awk -F '/' '{ print $3 }')
@@ -11,11 +15,12 @@ if [ -z ${1+x} ] || [ ${1} == 'master' ]; then
     dockerfileDir=${imageName}/${imageVersion}
     fnBuildDockerImage
   done
-else
+elif [[ ${1} =~ ^(add|update)-(jormungandr|cardano-node)-[0-9]+.*$ ]]; then
   imageName=$(echo ${1} | awk -F '-' '{ print $2 }')
   imageVersion=$(echo ${1} | awk -F '-' '{ print $3 }')
   imageTag=${repositoryName}/${imageName}:${imageVersion}
   dockerfileDir=${imageName}/${imageVersion}
+  fnBuildDockerImage
 fi
 
 function fnBuildDockerImage {
