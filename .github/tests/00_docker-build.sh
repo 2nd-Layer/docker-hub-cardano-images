@@ -37,6 +37,6 @@ elif [[ ${branchName} =~ ^(add|update)-(jormungandr|cardano-node)-[0-9]+.*$ ]]; 
   dockerfileDir=${imageName}/${imageVersion}
   fnBuildDockerImage
 else
-  echo "Can't recognize argument!"
+  echo "Can't recognize branchName: ${branchName}!"
   exit 1
 fi
