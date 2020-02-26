@@ -3,6 +3,8 @@ set -e
 
 if [ $1 == 'merge' ]; then
   branchName=${2}
+else
+  branchName=${1}
 fi
 
 echo "Running on branch: ${branchName}"
@@ -38,5 +40,5 @@ elif [[ ${branchName} =~ ^(add|update)-(jormungandr|cardano-node)-[0-9]+.*$ ]]; 
   fnBuildDockerImage
 else
   echo "Can't recognize branchName: ${branchName}!"
-  exit 1
+  exit 0
 fi
