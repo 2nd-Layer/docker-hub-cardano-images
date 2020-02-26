@@ -33,8 +33,13 @@ elif [ ${branchName} == 'master' ]; then
     fnBuildDockerImage
   done
 elif [[ ${branchName} =~ ^(add|update)-(jormungandr|cardano-node)-[0-9]+.*$ ]]; then
-  imageName=$(echo ${branchName} | awk -F '-' '{ print $2 }')
-  imageVersion=$(echo ${branchName} | awk -F '-' '{ print $3 }')
+  if [[ ${branchName} =~ ^.*-cardano-node-.* ]]; then
+    imageName='cardano-node'
+    imageVersion=$(echo ${branchName} | awk -F '-' '{ print $4 }')
+  else
+    imageName=$(echo ${branchName} | awk -F '-' '{ print $2 }')
+    imageVersion=$(echo ${branchName} | awk -F '-' '{ print $3 }')
+  fi
   imageTag=${repositoryName}/${imageName}:${imageVersion}
   dockerfileDir=${imageName}/${imageVersion}
   fnBuildDockerImage
