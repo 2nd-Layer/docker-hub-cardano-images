@@ -40,5 +40,5 @@ elif [[ ${branchName} =~ ^(add|update)-(jormungandr|cardano-node)-[0-9]+.*$ ]]; 
   fnBuildDockerImage
 else
   echo "Can't recognize branchName: ${branchName}!"
-  exit 1
+  exit 0
 fi
