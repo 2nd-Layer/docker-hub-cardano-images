@@ -1,5 +1,5 @@
-name: Test Docker Build for images
 on: push
+name: Test Docker Build for images
 jobs:
   build:
     runs-on: ubuntu-latest
