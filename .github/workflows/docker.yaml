@@ -12,5 +12,3 @@ jobs:
         uses: actions/checkout@v2
       - name: Build Docker image
         run: .github/tests/00_docker-build.sh ${GITHUB_REF##*/}
-      - name: Test 
-      
