@@ -12,6 +12,8 @@ function fnBuildDockerImage {
   popd
 }
 
+repositoryName='2ndlayer'
+
 if [ -z ${1+x} ]; then
   echo "No argument provided!"
   exit 1
