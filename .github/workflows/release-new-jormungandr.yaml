@@ -1,0 +1,16 @@
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '* * * * *'
+
+name: Release new Jormungandr image
+
+jobs:
+  check-jormungandr-release:
+    name: Check input-output-hk/jormungandr releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Check for new Jormungandr release!
+        run: .github/tests/01_release-new-jormungandr.sh
