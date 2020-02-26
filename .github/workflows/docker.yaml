@@ -24,4 +24,4 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Build Docker image(s)
-        run: .github/tests/00_docker-build.sh ${GITHUB_REF##*/}
+        run: .github/tests/00_docker-build.sh ${GITHUB_REF##*/} ${GITHUB_HEAD_REF##*/}
