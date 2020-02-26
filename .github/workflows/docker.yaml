@@ -6,7 +6,7 @@ on:
       - 'update-jormungandr-[0-9]+.*'
       - 'add-cardano-node-[0-9]+.*'
       - 'update-cardano-node-[0-9]+.*'
-  pull-requests:
+  pull_requests:
     branches:
       - 'master'
       - 'add-jormungandr-[0-9]+.*'
