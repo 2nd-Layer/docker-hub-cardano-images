@@ -3,8 +3,6 @@ set -e
 
 which jq >> /dev/null 2>&1 || echo "jq binary is missing!"
 
-git checkout automate-jormungandr-release
-
 GH_JSON=$(curl --proto '=https' --tlsv1.2 -sSf "https://api.github.com/repos/input-output-hk/jormungandr/releases/latest")
 if [ $(echo ${GH_JSON} | jq -r .prerelease) == false ]; then
   jormVersionTag=$(echo ${GH_JSON} | jq -r .tag_name)
