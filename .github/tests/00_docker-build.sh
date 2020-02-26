@@ -3,6 +3,8 @@ set -e
 
 if [ $1 == 'merge' ]; then
   branchName=${2}
+else
+  branchName=${1}
 fi
 
 echo "Running on branch: ${branchName}"
