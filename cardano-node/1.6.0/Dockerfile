@@ -14,7 +14,7 @@ RUN git cherry-pick -m 1 -n 6308e1bf30b76d54986aa0dff74e38b803e6a68e
 # Ugly workaround for vty-5.25.1
 RUN ln -s /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so
 RUN stack install \
-      --flag cardano-node:-with_wallet-client \
+      --flag cardano-node:-with_wallet_client \
       --flag cardano-node:-with_chairman \
       --local-bin-path=/usr/local/bin
 
