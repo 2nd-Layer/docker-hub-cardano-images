@@ -1,6 +1,6 @@
 FROM perlur/centos-rust-rustup AS builder
 
-ENV JORMUNGANDR_VERSION="0.8.14"
+ENV JORMUNGANDR_VERSION="v0.8.14"
 
 RUN yum update -y && \
     yum install -y git gcc openssl-devel
