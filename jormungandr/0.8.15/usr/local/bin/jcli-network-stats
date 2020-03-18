@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source /usr/local/lib/jcli-set-env-variables.sh
+
+case "$1" in
+  count)
+    jcli rest v0 network stats get -h ${JORM_REST_API_URI} | grep "addr" | wc -l
+  ;;
+  count-public)
+    jcli rest v0 network stats get -h ${JORM_REST_API_URI} | grep "addr" | grep -v '~' | wc -l
+  ;;
+   *)
+    jcli rest v0 network stats get -h ${JORM_REST_API_URI}
+  ;;
+esac
