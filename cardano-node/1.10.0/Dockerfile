@@ -13,8 +13,6 @@ RUN git checkout ${CARDANO_NODE_VERSION}
 # Ugly workaround for vty-5.25.1
 RUN ln -s /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so
 RUN stack install \
-      --flag cardano-node:-with_wallet_client \
-      --flag cardano-node:-with_chairman \
       --local-bin-path=/usr/local/bin
 
 FROM perlur/centos-base
