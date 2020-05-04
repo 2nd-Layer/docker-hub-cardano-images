@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source /usr/local/lib/jcli-set-env-variables.sh
+
+case "$1" in
+  count-slots)
+    jcli rest v0 leaders logs get | grep "scheduled_at_time:" | wc -l
+  ;;
+   *)
+    jcli rest v0 leaders logs get
+  ;;
+esac
