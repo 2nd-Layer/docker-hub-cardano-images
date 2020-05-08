@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  jormungandr:
+    image: jormungandr:0.8.18
+    deploy:
+      replicas: 1
+      # restart_policy:
+        # condition: any
+    ### deprecated
+    ### container_name: node01
+    ###	
+    ports:
+      # - "3001:3001"
+      - published: 7001
+        target: 7001
+        protocol: tcp
+        mode: host
+    environment:
+      - POOLTOOL_USER_ID=89c7bd70-45e4-4c53-877e-4de37f6d22d8
+      # jormanager.pooltool.poolId=fb354577be37b9e98092d897f3f156530b6961438dc425feafb5aea4971aa662
+    volumes:
+      - /home/des_hawes/srv/srv01:/srv
+    deploy:
+      placement:
+        constraints: [node.role == manager]
