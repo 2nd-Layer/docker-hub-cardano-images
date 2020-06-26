@@ -70,4 +70,6 @@ RUN mkdir /srv/cardano/cardano-node/etc/secrets/
 
 WORKDIR /srv/cardano/cardano-node/
 
+COPY srv/cardano/cardano-node/ /srv/cardano/cardano-node/
+
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

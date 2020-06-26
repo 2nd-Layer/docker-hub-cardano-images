@@ -49,5 +49,3 @@ else
     --socket-path ${CARDANO_NODE_SOCKET_PATH} \
     --port ${CARDANO_NODE_PORT}
 fi
-
-export ${CARDANO_NODE_SOCKET_PATH}
