@@ -45,7 +45,7 @@ RUN yum update -y && \
     rm -rf /var/cache/yum && \
     rm -rf /var/cache/dnf
 
-EXPOSE 3000
+EXPOSE 9000
 
 COPY --from=builder /usr/local/bin/cardano-node /usr/local/bin/
 COPY --from=builder /usr/local/bin/cardano-cli /usr/local/bin/
