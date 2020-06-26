@@ -52,6 +52,7 @@ COPY --from=builder /usr/local/bin/cardano-cli /usr/local/bin/
 COPY usr/local/lib/* /usr/local/lib/
 COPY usr/local/bin/* /usr/local/bin/
 
+RUN mkdir -p /var/run/cardano/
 RUN mkdir -p /srv/cardano/
 
 RUN useradd -c "Cardano node user" \
@@ -61,6 +62,7 @@ RUN useradd -c "Cardano node user" \
             -s /bin/nologin \
             cardano-node
 
+RUN chown cardano-node.cardano-node /var/run/cardano/
 USER cardano-node
 
 RUN mkdir /srv/cardano/cardano-node/{etc,log,storage}/

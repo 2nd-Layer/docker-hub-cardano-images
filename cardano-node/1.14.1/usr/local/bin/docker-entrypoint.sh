@@ -28,13 +28,15 @@ else
       --config ${CARDANO_NODE_CONF_FILE} \
       --database-path ${CARDANO_NODE_DB_PATH} \
       --port ${CARDANO_NODE_PORT} \
-      --topology ${CARDANO_NODE_TOPOLOGY_FILE}
+      --topology ${CARDANO_NODE_TOPOLOGY_FILE} \
+      --socket ${CARDANO_NODE_SOCKET_FILE}
   else
     echo "'cardano-node' secret file found! 'cardano-node' will start in a slot leader mode!"
     cardano-node run \
       --config ${CARDANO_NODE_CONF_FILE} \
       --database-path ${CARDANO_NODE_DB_PATH} \
       --port ${CARDANO_NODE_PORT} \
-      --topology ${CARDANO_NODE_TOPOLOGY_FILE}
+      --topology ${CARDANO_NODE_TOPOLOGY_FILE} \
+      --socket ${CARDANO_NODE_SOCKET_FILE}
   fi
 fi
