@@ -22,12 +22,14 @@ elif [ -f ${CNODE_USER_HOME}etc/config.yaml ]; then
   CNODE_CONF_FILE=${CNODE_USER_HOME}etc/config.yaml
   CNODE_CONF_TYPE="yaml"
 fi
-if [ -f ${CNODE_USER_HOME}etc/secrets/node_secret.yaml ]; then
-  CNODE_SECRET_FILE=${CNODE_USER_HOME}etc/secrets/node_secret.yaml
-  CNODE_NODE_TYPE="leader"
-  CNODE_POOL_ID=$(grep 'node_id' ${JORM_SECRET_FILE} | awk '{print $2}')
-else
-  CNODE_NODE_TYPE="relay"
+if ! [[ -z ${CNODE_NODE_TYPE+x} ]]; then 
+  if [ -f ${CNODE_USER_HOME}etc/secrets/node_secret.yaml ]; then
+    CNODE_SECRET_FILE=${CNODE_USER_HOME}etc/secrets/node_secret.yaml
+    CNODE_NODE_TYPE="leader"
+    CNODE_POOL_ID=$(grep 'node_id' ${JORM_SECRET_FILE} | awk '{print $2}')
+  else
+    CNODE_NODE_TYPE="relay"
+  fi
 fi
 
 : ${CNODE_DB_PATH:=${CNODE_DB_PATH:-${CNODE_USER_HOME}/storage/}}
