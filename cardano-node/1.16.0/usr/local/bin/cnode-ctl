@@ -23,6 +23,10 @@ case "$1" in
     cardano-cli get-tip ${MAGIC} | tail -n +4 | head -n 3
   ;;
   healthcheck)
+    if [[ ${CONTAINER_UPTIME} -lt 60 ]]; then
+      echo "WARN: Container uptime less than 60 seconds."
+      exit 0
+    fi
     # Get-Tip HEALTHCHECK
     declare -A CNODE_STATE
     CURRENT_CNODE_STATE=$(mktemp)
