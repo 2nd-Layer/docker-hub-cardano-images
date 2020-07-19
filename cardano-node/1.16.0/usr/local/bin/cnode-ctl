@@ -9,7 +9,7 @@ function shutdownCNODE () {
   >&2 echo "ERROR: Terminating!"
   #TODO: Add graceful shutdown if available
   # cardano-cli shelley system stop?
-  kill $(pgrep cardano-node)
+  kill $(pgrep cardano-node) && exit 1
 }
 
 function getFromEKG () {
