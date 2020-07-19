@@ -4,6 +4,18 @@ set -e
 
 source /usr/local/lib/cardano-node-set-env-variables.sh
 
+function shutdownCNODE () {
+  >&2 echo "ERROR: $1"
+  >&2 echo "ERROR: Terminating!"
+  #TODO: Add graceful shutdown if available
+  # cardano-cli shelley system stop?
+  kill $(pgrep cardano-node) && exit 1
+}
+
+function getFromEKG () {
+  curl -sS -H 'Accept: application/json' "http://localhost:12788/" | jq $1
+}
+
 MAGIC='--testnet-magic 42'
 
 case "$1" in
@@ -11,6 +23,15 @@ case "$1" in
     cardano-cli get-tip ${MAGIC} | tail -n +4 | head -n 3
   ;;
   healthcheck)
+    # Get-Uptime HEALTHCHECK
+    if [[ ${CONTAINER_UPTIME} -lt 60 ]]; then
+      echo "WARN: Container uptime is ${CONTAINER_UPTIME}/60 seconds."
+      exit 0
+    fi
+    if ! [[ -z ${DEBUG+x} ]]; then
+      >&2 echo "DEBUG: currentContainerUptime: ${CONTAINER_UPTIME} seconds"
+    fi
+    # Get-Tip HEALTHCHECK
     declare -A CNODE_STATE
     CURRENT_CNODE_STATE=$(mktemp)
     if cardano-cli get-tip ${MAGIC} | tail -n +4 | head -n 3 > ${CURRENT_CNODE_STATE}; then
@@ -21,15 +42,33 @@ case "$1" in
       CNODE_STATE['currentBlockNumber']=$(echo "${CURRENT_CNODE_STATE[2]}" | awk '{ print $3}')
       unset IFS
     else
-      >&2 echo "ERROR: Failed to retrieve cardano-node tip!"
-      >&2 echo "ERROR: Terminating!"
-      #TODO: Add graceful shutdown if available
-      exit 1
+      shutdownCNODE "Failed to retrieve cardano-node tip!"
     fi
     if ! [[ -z ${DEBUG+x} ]]; then
       >&2 echo "DEBUG: currentBlockHash: ${CNODE_STATE['currentBlockHash']}"
       >&2 echo "DEBUG: currentSlot: ${CNODE_STATE['currentSlot']}"
       >&2 echo "DEBUG: currenttBlockNumber: ${CNODE_STATE['currentBlockNumber']}"
+    fi
+    # Get-Peer-Count HEALTHCHECK
+    if CNODE_PEER_COUNT=`getFromEKG '.cardano.node.BlockFetchDecision.peers.connectedPeers.int.val'`; then
+      if [[ ${CNODE_NODE_TYPE} == 'relay' ]]; then
+        if [[ ${CNODE_PEER_COUNT} -lt 3 ]]; then
+          shutdownCNODE "Peer count on ${CNODE_NODE_TYPE} node is only ${CNODE_PEER_COUNT}!"
+        fi
+      elif [[ ${CNODE_NODE_TYPE} == 'leader' ]]; then
+        if [[ ${CNODE_PEER_COUNT} -lt 1 ]]; then
+          shutdownCNODE "Peer count on ${CNODE_NODE_TYPE} node is only ${CNODE_PEER_COUNT}!"
+        fi
+      else
+        shutdownCNODE "Unknown node type, not a leader, nor a relay!"
+      fi
+    else
+      shutdownCNODE "Failed to retrieve CNODE_PEER_COUNT from EKG!"
+    fi
+    if ! [[ -z ${DEBUG+x} ]]; then
+      >&2 echo "DEBUG: nodeType: ${CNODE_NODE_TYPE}"
+      >&2 echo "DEBUG: peerCount: ${CNODE_PEER_COUNT}"
+      >&2 echo "DEBUG: peerCountExpected: ${CNODE_PEER_COUNT}" #FIXME: Add real expected count
     fi
   ;;
   *)
