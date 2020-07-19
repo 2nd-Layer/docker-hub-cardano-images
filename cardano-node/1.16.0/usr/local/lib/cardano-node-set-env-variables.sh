@@ -22,7 +22,7 @@ elif [ -f ${CNODE_USER_HOME}etc/config.yaml ]; then
   CNODE_CONF_FILE=${CNODE_USER_HOME}etc/config.yaml
   CNODE_CONF_TYPE="yaml"
 fi
-if ! [[ -z ${CNODE_NODE_TYPE+x} ]]; then 
+if [[ -z ${CNODE_NODE_TYPE+x} ]]; then
   if [ -f ${CNODE_USER_HOME}etc/secrets/node_secret.yaml ]; then
     CNODE_SECRET_FILE=${CNODE_USER_HOME}etc/secrets/node_secret.yaml
     CNODE_NODE_TYPE="leader"
@@ -30,6 +30,8 @@ if ! [[ -z ${CNODE_NODE_TYPE+x} ]]; then
   else
     CNODE_NODE_TYPE="relay"
   fi
+else
+  CNODE_NODE_TYPE=${CNODE_NODE_TYPE}
 fi
 
 : ${CNODE_DB_PATH:=${CNODE_DB_PATH:-${CNODE_USER_HOME}/storage/}}
