@@ -31,13 +31,13 @@ if [[ ! -f ${CNODE_SECRET_FILE} ]]; then
   echo "Config file: ${CNODE_CONF_FILE}"
   echo "Topology file: ${CNODE_TOPOLOGY_FILE}"
   echo "Database path: ${CNODE_DB_PATH}"
-  echo "Socket path: ${CNODE_SOCKET}"
+  echo "Socket path: ${CARDANO_NODE_SOCKET_PATH}"
   echo "Node port: ${CNODE_PORT}"
   cardano-node run \
     --config ${CNODE_CONF_FILE} \
     --topology ${CNODE_TOPOLOGY_FILE} \
     --database-path ${CNODE_DB_PATH} \
-    --socket-path ${CNODE_SOCKET_PATH} \
+    --socket-path ${CARDANO_NODE_SOCKET_PATH} \
     --port ${CNODE_PORT}
 
 else
@@ -46,6 +46,6 @@ else
     --config ${CNODE_CONF_FILE} \
     --topology ${CNODE_TOPOLOGY_FILE} \
     --database-path ${CNODE_DB_PATH} \
-    --socket-path ${CNODE_SOCKET_PATH} \
+    --socket-path ${CARDANO_NODE_SOCKET_PATH} \
     --port ${CNODE_PORT}
 fi
