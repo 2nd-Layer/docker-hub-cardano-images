@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -e
+
 CURRENT_TIME=$(date +%s)
 CONTAINER_START_TIME=$(stat --format %X /proc/1/)
-CONTAINER_UPTIME=$((${CURRENT_TIME} - ${START_TIME}))
+CONTAINER_UPTIME=$((${CURRENT_TIME} - ${CONTAINER_START_TIME}))
 
 CNODE_USER_HOME=$HOME
 if [ -f ${CNODE_USER_HOME}etc/genesis.json ]; then
