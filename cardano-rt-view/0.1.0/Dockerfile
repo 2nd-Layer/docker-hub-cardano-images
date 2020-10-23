@@ -40,7 +40,7 @@ EXPOSE 8080
 
 COPY --from=builder /usr/local/bin/cardano-rt-view /usr/local/bin/
 COPY --from=builder /usr/src/cardano-rt-view/static/ /usr/local/share/cardano-rt-view/static/
-#COPY usr/local/lib/* /usr/local/lib/
+COPY usr/local/lib/* /usr/local/lib/
 COPY usr/local/bin/* /usr/local/bin/
 
 RUN mkdir -p /srv/cardano/
