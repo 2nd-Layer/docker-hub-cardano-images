@@ -1,0 +1,60 @@
+#!/bin/bash
+
+source /usr/local/lib/jcli-set-env-variables.sh
+
+case "$1" in
+  healthcheck)
+    JORM_NODE_STATS=$(jcli rest v0 node stats get --output-format json || exit 1)
+    JORM_NODE_STATE=$(echo ${JORM_NODE_STATS} | jq -r .state)
+    CURRENT_TIME=$(date +%s)
+    if [[ ${JORM_NODE_STATE} =~ ^(StartingRestServer|PreparingStorage|PreparingBlock0|Bootstrapping|StartingWorkers)$ ]]; then
+      START_TIME=$(stat --format %X /proc/1/)
+      UPTIME=$((${CURRENT_TIME} - ${START_TIME}))
+      if [[ ${JORM_MAX_STARTUP_TIME} -eq 0 ]]; then
+        echo -n "Jormungandr startup time healthcheck disabled."
+      elif [[ ${UPTIME} -gt $((${JORM_MAX_STARTUP_TIME} * 60)) ]]; then
+        # Terminate if not ready in ${JORM_MAX_STARTUP_TIME} minutes
+        echo -n "Jormungandr was bootstrapping for ${JORM_MAX_STARTUP_TIME} minutes!"
+        exit 1
+      else
+        UPTIME=$(( ${UPTIME} / 60 ))
+        echo -n "Jormungandr is starting for ${UPTIME} minutes."
+        exit 0
+      fi
+    elif [[ ${JORM_NODE_STATE} == 'Running' ]]; then
+      if [[ ${JORM_NODE_TYPE} == 'relay' ]]; then
+        echo -n "Jormungandr is in relay mode."
+      elif [[ ${JORM_NODE_TYPE} == 'pool' ]]; then
+        if ! [[ -z ${POOLTOOL_DISABLED+x} ]]; then
+          echo -n "PoolTool is disabled, skipping PoolTool."
+        elif [[ -z ${POOLTOOL_USER_ID+x} ]]; then
+          echo -n 'Variable ${POOLTOOL_USER_ID} is empty, skipping PoolTool.'
+        else
+          if [[ $((${CURRENT_TIME} % 5)) -eq 0 ]]; then
+            source /usr/local/lib/jormungandr-pooltool-reporter.sh
+            if [[ ${lastBlockHeight} == ${POOLTOOL_MAXHEIGHT} ]]; then
+              echo -n "PoolTool is reporting same lastBlockHeight: ${lastBlockHeight}"
+              exit 0
+            elif [[ ${lastBlockHeight} -lt ${POOLTOOL_MAXHEIGHT} ]]; then
+              DELTA=$((${POOLTOOL_MAXHEIGHT} - ${lastBlockHeight}))
+              echo -n "PoolTool reporting lastBlockHeight of ${POOLTOOL_MAXHEIGHT} which is ${DELTA} higher. maxDelta is ${POOLTOOL_MAX_BLOCK_DELTA}."
+              if [[ ${DELTA} -gt ${POOLTOOL_MAX_BLOCK_DELTA} ]]; then
+                #TODO: Add some smart bootstrap without trusted peers handling logic
+                if [[ ${jormUptime} -lt ${JORM_MAX_FAULT_UPTIME} ]]; then
+                  echo -n "Jormungandr uptime is less than ${JORM_MAX_FAULT_UPTIME} seconds."
+                  exit 0
+                else
+                  jcli rest v0 shutdown post
+                  exit 1
+                fi
+              fi
+            fi
+          fi
+        fi
+      fi
+    fi
+  ;;
+   *)
+    jcli rest v0 node stats get
+  ;;
+esac
